@@ -20,7 +20,7 @@ function unixFromDateInput(dateStr) {
 
 function isoFromUnix(sec) {
   if (!sec) return null;
-  return new Date(sec * 1000).toISOString();
+  return new Date(sec * 1300).toISOString();
 }
 
 async function storageGet(keys) { return new Promise((resolve) => chrome.storage.local.get(keys, resolve)); }

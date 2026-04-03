@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Merrel Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #03060b;
+      --panel: rgba(255, 255, 255, 0.035);
+      --panel-strong: rgba(255, 255, 255, 0.055);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text: #f4f7ff;
+      --muted: rgba(244, 247, 255, 0.62);
+      --soft: rgba(244, 247, 255, 0.44);
+      --accent: #18b985;
+      --accent-2: #0f7e61;
+      --glow: rgba(24, 185, 133, 0.22);
+      --danger: #ff6b6b;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      --radius: 18px;
+      --radius-sm: 14px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      width: 372px;
+      padding: 12px;
+      overflow-x: hidden;
+      font-family: 'Inter', Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at 18% 8%, rgba(40, 65, 120, 0.30), transparent 62%),
+        radial-gradient(900px 700px at 82% 12%, rgba(0, 120, 110, 0.18), transparent 58%),
+        linear-gradient(180deg, #05070c 0%, #03060a 42%, #020408 100%);
+      background-color: var(--bg);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(700px 500px at 50% 0%, rgba(255, 255, 255, 0.028), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0));
+      z-index: 0;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.12));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), var(--shadow);
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 10%),
+        radial-gradient(520px 360px at 50% 42%, rgba(24, 185, 133, 0.05), transparent 60%);
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(24, 185, 133, 0.55);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      margin-top: 3px;
+      font-size: 11px;
+      color: var(--soft);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge {
+      padding: 7px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(24, 185, 133, 0.20);
+      background: rgba(24, 185, 133, 0.10);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 0 20px rgba(24, 185, 133, 0.10);
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    .hero {
+      padding: 12px 2px 18px;
+      text-align: center;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: 38px;
+      line-height: 0.95;
+      letter-spacing: 0.015em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 10px 26px rgba(0, 0, 0, 0.34), 0 0 28px rgba(255, 255, 255, 0.04);
+    }
+
+    .hero-subtitle {
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(244, 247, 255, 0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      text-align: center;
+    }
+
+    .card {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(244, 247, 255, 0.74);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    input,
+    select,
+    .status {
+      font-family: 'Inter', Arial, sans-serif;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(24, 185, 133, 0.42);
+      box-shadow: 0 0 0 4px rgba(24, 185, 133, 0.12);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .hint {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .row2,
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .row2 {
+      margin-top: 12px;
+    }
+
+    .grid {
+      margin-top: 10px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 42px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .primary {
+      color: #f6fff9;
+      border-color: rgba(24, 185, 133, 0.34);
+      background: linear-gradient(180deg, #18b985, #0f7e61);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 0 20px rgba(24, 185, 133, 0.20),
+        0 0 46px rgba(24, 185, 133, 0.12);
+    }
+
+    .primary:hover {
+      border-color: rgba(24, 185, 133, 0.42);
+      background: linear-gradient(180deg, #1cc993, #11916f);
+    }
+
+    .danger {
+      background: rgba(255, 107, 107, 0.10);
+      border-color: rgba(255, 107, 107, 0.18);
+    }
+
+    .danger:hover {
+      background: rgba(255, 107, 107, 0.14);
+      border-color: rgba(255, 107, 107, 0.28);
+    }
+
+    .status {
+      min-height: 92px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(0, 0, 0, 0.22);
+      color: #dbe6ff;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
+    .foot {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--soft);
+    }
+
+    .foot a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .brand-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(244, 247, 255, 0.40);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="head">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text">
+          <div class="brand-title">Merrel Bot</div>
+          <div class="brand-subtitle">buff history</div>
+        </div>
+      </div>
+      <div class="badge">cs2</div>
+    </div>
+
+    <div class="content">
+      <div class="hero">
+        <h1 class="hero-title">Merrel Bot</h1>
+        <div class="hero-subtitle">Сбор и экспорт истории сделок Buff</div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Настройки</div>
+
+        <label for="cutoffDate">Дата начала пользования ботом</label>
+        <input id="cutoffDate" type="date" />
+        <div class="hint">Парсинг останавливается на этой дате и глубже в историю не идет.</div>
+
+        <div class="row2">
+          <div>
+            <label for="collectMode">Собирать сделки</label>
+            <select id="collectMode">
+              <option value="all">Все</option>
+              <option value="success_delivering">SUCCESS + DELIVERING</option>
+              <option value="success_only">Только SUCCESS</option>
+            </select>
+          </div>
+          <div>
+            <label for="exportMode">Экспорт</label>
+            <select id="exportMode">
+              <option value="all">Все</option>
+              <option value="success_delivering">SUCCESS + DELIVERING</option>
+              <option value="success_only">Только SUCCESS</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid">
+          <button id="save">Сохранить</button>
+          <button id="run" class="primary">Добавить данные</button>
+        </div>
+
+        <div class="grid">
+          <button id="export">Экспорт JSON</button>
+          <button id="clear" class="danger">Очистить</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Статус</div>
+        <div id="status" class="status">Готово.</div>
+        <div class="foot">
+          Запросы работают только если в этом браузере активна авторизация на
+          <a href="https://buff.163.com" target="_blank" rel="noopener">buff.163.com</a>.
+        </div>
+        <div class="brand-link">merrelbot.com</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

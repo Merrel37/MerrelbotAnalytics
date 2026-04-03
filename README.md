@@ -1,3 +1,3 @@
 # MERRELBOT
 ---
-site - merrelbot.com
+site - https://merrelbot.com
